@@ -22,5 +22,13 @@ $(BIN_DIR)/bootloader.bin: $(SRC_DIR)/bootloader.asm
 $(BIN_DIR)/kernel.o: $(SRC_DIR)/kernel.c
 	$(CC) $(CFLAGS) -o $@ $<
 
+$(BIN_DIR)/boot.img: $(BIN_DIR)/bootloader.bin $(BIN_DIR)/kernel.bin
+	cat $^ > $@
+
+$(BIN_DIR)/boot.iso: $(BIN_DIR)/boot.img
+	mkisofs -o $@ -b boot.img $^
+
+all: $(BIN_DIR)/kernel.bin $(BIN_DIR)/boot.bin $(BIN_DIR)/boot.img $(BIN_DIR)/boot.iso
+
 clean:
 	rm -f $(BIN_DIR)/*.bin $(BIN_DIR)/*.o
