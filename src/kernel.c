@@ -2,11 +2,19 @@
 #define VGA_WIDTH 80
 
 void print_char(char character, int col, int row, char attribute_byte) {
-    // ... (same as before)
+    unsigned char *vga = (unsigned char *)VGA_ADDRESS;
+    int offset = (row * VGA_WIDTH + col) * 2;
+    vga[offset] = character;
+    vga[offset + 1] = attribute_byte;
 }
 
+// Function to clear the screen
 void clear_screen() {
-    // ... (same as before)
+    for (int row = 0; row < 25; ++row) {
+        for (int col = 0; col < 80; ++col) {
+            print_char(' ', col, row, 0x0F);
+        }
+    }
 }
 
 
